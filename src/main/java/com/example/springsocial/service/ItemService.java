@@ -1,6 +1,7 @@
 package com.example.springsocial.service;
 
 import com.example.springsocial.dto.ItemDTO;
+import com.example.springsocial.dto.SpecificItemDTO;
 import com.example.springsocial.model.Item;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,4 +15,5 @@ public interface ItemService {
 
     List<ItemDTO> getItems();
 
+    SpecificItemDTO getSpecificItem(String itemIdentifier);
 }

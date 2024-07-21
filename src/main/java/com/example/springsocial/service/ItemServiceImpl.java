@@ -2,9 +2,12 @@ package com.example.springsocial.service;
 
 import com.example.springsocial.dto.ItemDTO;
 import com.example.springsocial.dto.PhotoDTO;
+import com.example.springsocial.dto.SpecificItemDTO;
 import com.example.springsocial.model.Item;
 import com.example.springsocial.model.Photo;
 import com.example.springsocial.repository.ItemRepository;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +22,11 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final ModelMapper modelMapper;
 
-    public ItemServiceImpl(ItemRepository itemRepository) {
+    public ItemServiceImpl(ItemRepository itemRepository, ModelMapper modelMapper) {
         this.itemRepository = itemRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -57,6 +62,20 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDTO> getItems() {
         List<Item> items = itemRepository.findAll();
         return items.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public SpecificItemDTO getSpecificItem(String itemIdentifier) {
+       Item item = itemRepository.findById(Long.parseLong(itemIdentifier)).orElseThrow(() -> new RuntimeException("Item not found"));
+
+        modelMapper.typeMap(Item.class, SpecificItemDTO.class).addMappings(mapper -> {
+            mapper.map(Item::getPhotos, SpecificItemDTO::setPhotos);
+        });
+
+        SpecificItemDTO itemDTO = modelMapper.map(item, SpecificItemDTO.class);
+
+        return itemDTO;
+
     }
 
     private ItemDTO convertToDTO(Item item) {
