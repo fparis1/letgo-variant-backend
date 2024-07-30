@@ -15,4 +15,5 @@ public class SpecificItemDTO {
     private String description;
     private String price;
     private List<PhotoDTO> photos;
+    private UserDTO user;
 }

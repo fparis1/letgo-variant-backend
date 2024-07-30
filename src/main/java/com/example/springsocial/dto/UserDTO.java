@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemDTO {
-    private Long id;
-    private String title;
-    private String description;
-    private String price;
-    private PhotoDTO photo;
+public class UserDTO {
+
+    private String name;
+    private String email;
+
 }

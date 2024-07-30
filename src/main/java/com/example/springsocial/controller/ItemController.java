@@ -26,10 +26,11 @@ public class ItemController {
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("price") Double price,
-            @RequestParam("file") MultipartFile[] files) throws IOException {
+            @RequestParam("file") MultipartFile[] files,
+            @RequestParam("email") String email) throws IOException {
 
         // Return a response entity
-        return itemService.postItem(title, description, price, files);
+        return itemService.postItem(title, description, price, files, email);
     }
 
     @GetMapping("/getItems")

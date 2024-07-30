@@ -3,11 +3,13 @@ package com.example.springsocial.service;
 import com.example.springsocial.dto.ItemDTO;
 import com.example.springsocial.dto.PhotoDTO;
 import com.example.springsocial.dto.SpecificItemDTO;
+import com.example.springsocial.dto.UserDTO;
 import com.example.springsocial.model.Item;
 import com.example.springsocial.model.Photo;
+import com.example.springsocial.model.User;
 import com.example.springsocial.repository.ItemRepository;
+import com.example.springsocial.repository.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +24,16 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
-    private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
-    public ItemServiceImpl(ItemRepository itemRepository, ModelMapper modelMapper) {
+    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository) {
         this.itemRepository = itemRepository;
-        this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
-    public ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files) throws IOException {
+    public ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files, String email) throws IOException {
 
         List<Photo> photoList = new ArrayList<>();
 
@@ -51,7 +53,11 @@ public class ItemServiceImpl implements ItemService {
             photoList.add(photo);
         }
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         item.setPhotos(photoList);
+        item.setUser(user);
 
         itemRepository.saveAndFlush(item);
 
@@ -66,16 +72,30 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public SpecificItemDTO getSpecificItem(String itemIdentifier) {
-       Item item = itemRepository.findById(Long.parseLong(itemIdentifier)).orElseThrow(() -> new RuntimeException("Item not found"));
 
-        modelMapper.typeMap(Item.class, SpecificItemDTO.class).addMappings(mapper -> {
-            mapper.map(Item::getPhotos, SpecificItemDTO::setPhotos);
-        });
+        // Custom repository method to fetch item with photos in a single query
+        Item item = itemRepository.findItemWithPhotosById(Long.parseLong(itemIdentifier))
+                .orElseThrow(() -> new RuntimeException("Item not found"));
 
-        SpecificItemDTO itemDTO = modelMapper.map(item, SpecificItemDTO.class);
+        // Manually map Item to SpecificItemDTO using builder pattern
 
-        return itemDTO;
-
+        return SpecificItemDTO.builder()
+                .id(item.getId())
+                .title(item.getTitle())
+                .price(item.getPrice())
+                .photos(item.getPhotos().stream()
+                        .map(photo -> PhotoDTO.builder()
+                                .id(photo.getId())
+                                .fileName(photo.getFileName())
+                                .contentType(photo.getContentType())
+                                .data(photo.getData())
+                                .build())
+                        .collect(Collectors.toList()))
+                .user(UserDTO.builder()
+                        .email(item.getUser().getEmail())
+                        .name(item.getUser().getName())
+                        .build())
+                .build();
     }
 
     private ItemDTO convertToDTO(Item item) {
