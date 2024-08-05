@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -33,6 +34,24 @@ public class Item {
 
     @Column(nullable = false)
     private String subcategory;
+
+    @Column(nullable = false)
+    private LocalDate createdDate;
+
+    @Column(nullable = false)
+    private String county;
+
+    @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String settlement;
+
+    @Column(nullable = false)
+    private double latitude;
+
+    @Column(nullable = false)
+    private double longitude;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Photo> photos;

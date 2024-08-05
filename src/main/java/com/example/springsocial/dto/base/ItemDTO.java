@@ -15,11 +15,9 @@ import java.time.LocalDate;
 public class ItemDTO {
     private Long id;
     private String title;
-    private String description;
     private String price;
     private PhotoDTO photo;
     private LocalDate createdDate;
     private String county;
     private String city;
-    private String settlement;
 }

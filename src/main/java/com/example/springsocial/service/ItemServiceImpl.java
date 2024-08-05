@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files, String email, String category, String subcategory) throws IOException {
+    public ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files, String email, String category, String subcategory, String county, String city, String settlement, double latitude, double longitude) throws IOException {
 
         List<Photo> photoList = new ArrayList<>();
 
@@ -44,6 +45,12 @@ public class ItemServiceImpl implements ItemService {
                 .price(price.toString())
                 .category(category)
                 .subcategory(subcategory)
+                .createdDate(LocalDate.now())
+                .county(county)
+                .city(city)
+                .settlement(settlement)
+                .latitude(latitude)
+                .longitude(longitude)
                 .build();
 
         for (MultipartFile file : files) {
@@ -86,6 +93,8 @@ public class ItemServiceImpl implements ItemService {
                 .id(item.getId())
                 .title(item.getTitle())
                 .price(item.getPrice())
+                .latitude(item.getLatitude())
+                .longitude(item.getLongitude())
                 .photos(item.getPhotos().stream()
                         .map(photo -> PhotoDTO.builder()
                                 .id(photo.getId())
@@ -107,6 +116,9 @@ public class ItemServiceImpl implements ItemService {
                 .id(item.getId())
                 .title(item.getTitle())
                 .price(item.getPrice())
+                .county(item.getCounty())
+                .city(item.getCity())
+                .createdDate(item.getCreatedDate())
                 .photo(photoDTO)
                 .build();
     }

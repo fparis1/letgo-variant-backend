@@ -6,6 +6,7 @@ import com.example.springsocial.service.ItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +32,23 @@ public class ItemController {
             @RequestParam("file") MultipartFile[] files,
             @RequestParam("email") String email,
             @RequestParam("category") String category,
-            @RequestParam("subcategory") String subcategory) throws IOException {
+            @RequestParam("subcategory") String subcategory,
+            @RequestParam("county") String county,
+            @RequestParam("city") String city,
+            @RequestParam("settlement") String settlement,
+            @RequestParam("latitude") double latitude,
+            @RequestParam("longitude") double longitude) throws IOException {
 
         // Return a response entity
-        return itemService.postItem(title, description, price, files, email, category, subcategory);
+        return itemService.postItem(title, description, price, files, email, category, subcategory, county, city, settlement, latitude, longitude);
     }
 
     @GetMapping("/getItems")
     public Page<ItemDTO> getItems(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(page, size, sort);
         return itemService.getItems(pageable);
     }
 

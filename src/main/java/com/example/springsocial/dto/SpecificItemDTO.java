@@ -16,4 +16,6 @@ public class SpecificItemDTO {
     private String price;
     private List<PhotoDTO> photos;
     private UserDTO user;
+    private double latitude;
+    private double longitude;
 }

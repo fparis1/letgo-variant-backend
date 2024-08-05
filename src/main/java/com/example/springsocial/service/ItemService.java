@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public interface ItemService {
 
-    ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files, String email, String category, String subcategory) throws IOException;
+    ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files, String email, String category, String subcategory, String county, String city, String settlement, double latitude, double longitude) throws IOException;
 
     Page<ItemDTO> getItems(Pageable pageable);
 
