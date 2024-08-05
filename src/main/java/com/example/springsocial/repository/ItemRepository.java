@@ -18,4 +18,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Page<Item> getAllBy(Pageable pageable);
 
+    @Query("SELECT i FROM Item i WHERE i.category = :category")
+    Page<Item> findByCategory(@Param("category") String category, Pageable pageable);
+
 }

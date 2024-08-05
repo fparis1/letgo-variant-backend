@@ -35,7 +35,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files, String email, String category, String subcategory, String county, String city, String settlement, double latitude, double longitude) throws IOException {
+    public ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files,
+                                           String email, String category, String subcategory, String county,
+                                           String city, String settlement, double latitude, double longitude,
+                                           Boolean radius) throws IOException {
 
         List<Photo> photoList = new ArrayList<>();
 
@@ -51,6 +54,7 @@ public class ItemServiceImpl implements ItemService {
                 .settlement(settlement)
                 .latitude(latitude)
                 .longitude(longitude)
+                .radius(radius)
                 .build();
 
         for (MultipartFile file : files) {
@@ -81,6 +85,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public Page<ItemDTO> getItemsByCategory(String category, Pageable pageable) {
+        Page<Item> items = itemRepository.findByCategory(category, pageable);
+        return items.map(this::convertToDTO);
+    }
+
+    @Override
     public SpecificItemDTO getSpecificItem(String itemIdentifier) {
 
         // Custom repository method to fetch item with photos in a single query
@@ -95,6 +105,7 @@ public class ItemServiceImpl implements ItemService {
                 .price(item.getPrice())
                 .latitude(item.getLatitude())
                 .longitude(item.getLongitude())
+                .radius(item.getRadius())
                 .photos(item.getPhotos().stream()
                         .map(photo -> PhotoDTO.builder()
                                 .id(photo.getId())

@@ -37,19 +37,21 @@ public class ItemController {
             @RequestParam("city") String city,
             @RequestParam("settlement") String settlement,
             @RequestParam("latitude") double latitude,
-            @RequestParam("longitude") double longitude) throws IOException {
+            @RequestParam("longitude") double longitude,
+            @RequestParam("radius") Boolean radius) throws IOException {
 
         // Return a response entity
-        return itemService.postItem(title, description, price, files, email, category, subcategory, county, city, settlement, latitude, longitude);
+        return itemService.postItem(title, description, price, files, email, category, subcategory, county, city, settlement, latitude, longitude, radius);
     }
 
     @GetMapping("/getItems")
     public Page<ItemDTO> getItems(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(value = "category", defaultValue = "none") String category) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable pageable = PageRequest.of(page, size, sort);
-        return itemService.getItems(pageable);
+        return category.equals("none") ? itemService.getItems(pageable) : itemService.getItemsByCategory(category, pageable);
     }
 
     @GetMapping("/getSpecificItem/{itemIdentifier}")

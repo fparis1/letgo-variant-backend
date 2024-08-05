@@ -53,6 +53,9 @@ public class Item {
     @Column(nullable = false)
     private double longitude;
 
+    @Column(nullable = false)
+    private Boolean radius;
+
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Photo> photos;
 

@@ -18,4 +18,5 @@ public class SpecificItemDTO {
     private UserDTO user;
     private double latitude;
     private double longitude;
+    private Boolean radius;
 }
