@@ -1,6 +1,6 @@
 package com.example.springsocial.service;
 
-import com.example.springsocial.dto.ItemDTO;
+import com.example.springsocial.dto.base.ItemDTO;
 import com.example.springsocial.dto.PhotoDTO;
 import com.example.springsocial.dto.SpecificItemDTO;
 import com.example.springsocial.dto.UserDTO;
@@ -9,7 +9,8 @@ import com.example.springsocial.model.Photo;
 import com.example.springsocial.model.User;
 import com.example.springsocial.repository.ItemRepository;
 import com.example.springsocial.repository.UserRepository;
-import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files, String email) throws IOException {
+    public ResponseEntity<String> postItem(String title, String description, Double price, MultipartFile[] files, String email, String category, String subcategory) throws IOException {
 
         List<Photo> photoList = new ArrayList<>();
 
@@ -41,6 +42,8 @@ public class ItemServiceImpl implements ItemService {
                 .title(title)
                 .description(description)
                 .price(price.toString())
+                .category(category)
+                .subcategory(subcategory)
                 .build();
 
         for (MultipartFile file : files) {
@@ -65,9 +68,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDTO> getItems() {
-        List<Item> items = itemRepository.findAll();
-        return items.stream().map(this::convertToDTO).collect(Collectors.toList());
+    public Page<ItemDTO> getItems(Pageable pageable) {
+        Page<Item> items = itemRepository.getAllBy(pageable);
+        return items.map(this::convertToDTO);
     }
 
     @Override

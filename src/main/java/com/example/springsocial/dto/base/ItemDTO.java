@@ -1,9 +1,12 @@
-package com.example.springsocial.dto;
+package com.example.springsocial.dto.base;
 
+import com.example.springsocial.dto.PhotoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -15,4 +18,8 @@ public class ItemDTO {
     private String description;
     private String price;
     private PhotoDTO photo;
+    private LocalDate createdDate;
+    private String county;
+    private String city;
+    private String settlement;
 }
