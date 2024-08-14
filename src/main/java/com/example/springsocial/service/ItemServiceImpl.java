@@ -91,6 +91,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public Page<ItemDTO> getItemsByCategoryAndSubcategory(String category, String subcategory, Pageable pageable) {
+        Page<Item> items = itemRepository.findByCategoryAndSubcategory(category, subcategory, pageable);
+        return items.map(this::convertToDTO);
+    }
+
+    @Override
     public SpecificItemDTO getSpecificItem(String itemIdentifier) {
 
         // Custom repository method to fetch item with photos in a single query

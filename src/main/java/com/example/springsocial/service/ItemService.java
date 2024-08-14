@@ -17,5 +17,7 @@ public interface ItemService {
 
     Page<ItemDTO> getItemsByCategory(String category, Pageable pageable);
 
+    Page<ItemDTO> getItemsByCategoryAndSubcategory(String category, String subcategory, Pageable pageable);
+
     SpecificItemDTO getSpecificItem(String itemIdentifier);
 }

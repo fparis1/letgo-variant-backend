@@ -48,10 +48,18 @@ public class ItemController {
     public Page<ItemDTO> getItems(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(value = "category", defaultValue = "none") String category) {
+            @RequestParam(value = "category", defaultValue = "none") String category,
+            @RequestParam(value = "subcategory", defaultValue = "none") String subcategory) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable pageable = PageRequest.of(page, size, sort);
-        return category.equals("none") ? itemService.getItems(pageable) : itemService.getItemsByCategory(category, pageable);
+
+        if (category.equals("none") && subcategory.equals("none")) {
+            return itemService.getItems(pageable);
+        } else if (subcategory.equals("none")) {
+            return itemService.getItemsByCategory(category, pageable);
+        } else {
+            return itemService.getItemsByCategoryAndSubcategory(category, subcategory, pageable);
+        }
     }
 
     @GetMapping("/getSpecificItem/{itemIdentifier}")
