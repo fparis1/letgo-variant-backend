@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -17,7 +17,7 @@ public class ItemDTO {
     private String title;
     private String price;
     private PhotoDTO photo;
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
     private String county;
     private String city;
 }

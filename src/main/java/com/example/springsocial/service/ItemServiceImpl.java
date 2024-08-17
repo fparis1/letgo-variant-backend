@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +49,7 @@ public class ItemServiceImpl implements ItemService {
                 .price(price.toString())
                 .category(category)
                 .subcategory(subcategory)
-                .createdDate(LocalDate.now())
+                .createdDate(LocalDateTime.now())
                 .county(county)
                 .city(city)
                 .settlement(settlement)

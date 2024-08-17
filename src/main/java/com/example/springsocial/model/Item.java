@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -36,7 +36,7 @@ public class Item {
     private String subcategory;
 
     @Column(nullable = false)
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
 
     @Column(nullable = false)
     private String county;
