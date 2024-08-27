@@ -113,6 +113,13 @@ public class ItemServiceImpl implements ItemService {
                 .latitude(item.getLatitude())
                 .longitude(item.getLongitude())
                 .radius(item.getRadius())
+                .createdDate(item.getCreatedDate())
+                .category(item.getCategory())
+                .subcategory(item.getSubcategory())
+                .county(item.getCounty())
+                .city(item.getCity())
+                .settlement(item.getSettlement())
+                .description(item.getDescription())
                 .photos(item.getPhotos().stream()
                         .map(photo -> PhotoDTO.builder()
                                 .id(photo.getId())
@@ -124,6 +131,7 @@ public class ItemServiceImpl implements ItemService {
                 .user(UserDTO.builder()
                         .email(item.getUser().getEmail())
                         .name(item.getUser().getName())
+                        .imageUrl(item.getUser().getImageUrl())
                         .build())
                 .build();
     }

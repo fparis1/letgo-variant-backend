@@ -2,6 +2,7 @@ package com.example.springsocial.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -19,4 +20,10 @@ public class SpecificItemDTO {
     private double latitude;
     private double longitude;
     private Boolean radius;
+    private LocalDateTime createdDate;
+    private String category;
+    private String subcategory;
+    private String county;
+    private String city;
+    private String settlement;
 }
